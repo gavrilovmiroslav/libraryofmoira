@@ -19,6 +19,7 @@
     <EmbeddedResource Include="Icon.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
     <PackageReference Include="Google.Apis.Sheets.v4" Version="1.60.0.2979" />
     <PackageReference Include="MonoGame.Extended" Version="3.8.0" />
     <PackageReference Include="MonoGame.Extended.Animations" Version="3.7.0" />

@@ -1,39 +1,34 @@
-﻿using System.Collections.Generic;
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.BitmapFonts;
 
-using MonoGame.Extended.Screens;
-using MonoGame.Extended.Screens.Transitions;
-
 using LibraryOfMoira.DataManagement;
-using LibraryOfMoira.Flow;
 using LibraryOfMoira.Models;
-using System.Threading.Tasks;
+using LibraryOfMoira.Flow.Gameflow;
 
 namespace LibraryOfMoira
 {
     public class LibraryOfMoiraGame : Game
     {
-        private GraphicsDeviceManager _graphics;
+        public SpriteBatch SpriteBatch;
+        public GameData Data;
+        public GameflowManager Flow;
 
-        public FadeTransition GetFade()
-        {
-            return new FadeTransition(GraphicsDevice, Color.Black, 1.0f);
-        }
-
-        public readonly ScreenManager ScreenManager;
-
-        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager _graphics;                
         private World _world;
         private BitmapFont _font;
+        
+        public GraphicsDevice GetGraphicsDevice()
+        {
+            return _graphics.GraphicsDevice;
+        }
 
-        private readonly MainMenu _mainMenu;
-        private readonly Gameplay _gameplay;
+        public void DrawString(string text, Vector2 pos, Color color)
+        {
+            SpriteBatch.DrawString(_font, text, pos, color);
+        }
 
         public LibraryOfMoiraGame()
         {
@@ -41,11 +36,8 @@ namespace LibraryOfMoira
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            ScreenManager = new ScreenManager();
-            Components.Add(ScreenManager);
-
-            _mainMenu = new MainMenu(this);
-            _gameplay = new Gameplay(this);
+            Data = new GameData();
+            Flow = new GameflowManager(this);
         }
 
         protected override void Initialize()
@@ -59,30 +51,32 @@ namespace LibraryOfMoira
                 .Build();
         }
 
+
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
             _font = Content.Load<BitmapFont>("input");
-            ScreenManager.LoadScreen(_mainMenu);
+
+            Flow.Start(State.Loading);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
             _world.Update(gameTime);
+            Flow.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             _world.Draw(gameTime);
+            Flow.Draw(gameTime);
             base.Draw(gameTime);
 
-            _spriteBatch.Begin();
-            _spriteBatch.DrawString(_font, "Hello world", new Vector2(10, 10), Color.White);
-            _spriteBatch.End();
+            // Debug
+            SpriteBatch.Begin();
+            Flow.DebugDraw(gameTime);
+            SpriteBatch.End();
         }
     }
 }
