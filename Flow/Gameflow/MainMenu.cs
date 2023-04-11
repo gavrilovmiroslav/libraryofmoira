@@ -15,6 +15,7 @@ namespace LibraryOfMoira.Flow.Gameflow
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            Game.DrawString("Press Space to start game", new Vector2(100, 100), Color.White);
         }
 
         public override void Update(GameTime gameTime)

@@ -27,7 +27,9 @@ namespace LibraryOfMoira
 
         public void DrawString(string text, Vector2 pos, Color color)
         {
+            SpriteBatch.Begin();
             SpriteBatch.DrawString(_font, text, pos, color);
+            SpriteBatch.End();
         }
 
         public LibraryOfMoiraGame()
@@ -74,9 +76,7 @@ namespace LibraryOfMoira
             base.Draw(gameTime);
 
             // Debug
-            SpriteBatch.Begin();
             Flow.DebugDraw(gameTime);
-            SpriteBatch.End();
         }
     }
 }

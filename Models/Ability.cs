@@ -8,9 +8,7 @@ namespace LibraryOfMoira.Models
         public string Name;
         public HashSet<string> Tags;
 
-        [QueryAs("Damage (low)")]
-        public int LowDamage;
-        [QueryAs("Damage (high)")]
-        public int HighDamage;
+
+        public string Description;
     }
 }
